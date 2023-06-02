@@ -218,7 +218,7 @@ for k in range(0,4):
             sendCMD_waitResp('MESSAGE,'+"注意！病患尚未服藥")
             sendCMD_waitResp('MESSAGE,'+"建議主動聯絡")
             btn.irq(handler=take)
-            while True:
+            while True:#家屬提醒後拿藥與緩衝時間 一小時
                 nowtime()
                 print(hour,minu,secs)
                 print(int(goal_h[k]),(int(goal_m[k])+1),goal_s)
