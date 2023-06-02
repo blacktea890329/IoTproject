@@ -166,7 +166,7 @@ def nowtime():
     secs=str(hex(t[0]))
     secs=secs.split("x")
     secs=str(secs[1])#取得現在時間
-# delay()
+
 
 while True :
     waitResp()
@@ -204,7 +204,7 @@ for k in range(0,4):
                     if flag1!=0:
                         b=2
                         break
-                speaker.duty_u16(65535)
+                speaker.duty_u16(65535)             
                 D[k]=1
         if(b!=0 and D[k]!=0):
             print("拿藥了")
@@ -217,5 +217,25 @@ for k in range(0,4):
             btn.irq(handler=None)
             sendCMD_waitResp('MESSAGE,'+"注意！病患尚未服藥")
             sendCMD_waitResp('MESSAGE,'+"建議主動聯絡")
+            btn.irq(handler=take)
+            while True:
+                nowtime()
+                print(hour,minu,secs)
+                print(int(goal_h[k]),(int(goal_m[k])+1),goal_s)
+                btn.irq(handler=take)
+                utime.sleep(1)
+                if flag1!=0:
+                    sendCMD_waitResp('MESSAGE,'+"病患已完成服藥")
+                    print("病患已完成服藥")
+                    servo(block[k])
+                    btn.irq(handler=None)
+                    break
+                if(hour==(int(goal_h[k])+1)):
+                    btn.irq(handler=None)
+                    sendCMD_waitResp('MESSAGE,'+"病患逾時未服藥")
+                    sendCMD_waitResp('MESSAGE,'+"將跳過此次藥劑")
+                    print("病患逾時未服藥將跳過此次藥劑")
+                    break
             break
+        btn.irq(handler=None)
         utime.sleep(1)
